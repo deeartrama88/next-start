@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+main {
+  min-height: 100dvh;
+  background-color: #1f1f1f;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  @apply bg-gray-700 text-white p-2 rounded-md cursor-pointer hover:bg-gray-600 transition-colors;
+}
