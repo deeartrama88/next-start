@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { FruitsVegetablesState } from "@/types/fruitsVegetables";
+import {
+  FVItem,
+  Timeout,
+  FruitsVegetablesState,
+} from "@/types/fruitsVegetables";
 
 export const useFruitsVegetablesGrid = create<FruitsVegetablesState>()(
   immer((set) => ({
@@ -52,31 +56,25 @@ export const useFruitsVegetablesGrid = create<FruitsVegetablesState>()(
     ],
     fruits: [],
     vegetables: [],
-    addToBucket: (item) =>
+    timeouts: [],
+    addTimeout: (item: Timeout) =>
       set((state) => {
+        state.timeouts.push(item);
+        const bucketItem = state.bucket.find((i) => i.name === item.name);
+        if (!bucketItem) return;
+        const key = bucketItem.type === "Fruit" ? "fruits" : "vegetables";
+        state[key].push(bucketItem);
+        state.bucket = state.bucket.filter((i) => i.name !== bucketItem.name);
+      }),
+    deleteTimeout: (item: FVItem) =>
+      set((state) => {
+        const timeout = state.timeouts.find((i) => i.name === item.name);
+        if (!timeout) return;
+        clearTimeout(timeout.id);
+        state.timeouts = state.timeouts.filter((i) => i.name !== item.name);
         state.bucket.push(item);
-      }),
-    addToFruits: (fruit) =>
-      set((state) => {
-        state.fruits.push(fruit);
-        state.bucket = state.bucket.filter((i) => i.name !== fruit.name);
-      }),
-    removeFromFruits: (fruit) =>
-      set((state) => {
-        state.fruits = state.fruits.filter((i) => i.name !== fruit.name);
-        state.bucket.push(fruit);
-      }),
-    addToVegetables: (vegetable) =>
-      set((state) => {
-        state.vegetables.push(vegetable);
-        state.bucket = state.bucket.filter((i) => i.name !== vegetable.name);
-      }),
-    removeFromVegetables: (vegetable) =>
-      set((state) => {
-        state.vegetables = state.vegetables.filter(
-          (i) => i.name !== vegetable.name
-        );
-        state.bucket.push(vegetable);
+        const key = item.type === "Fruit" ? "fruits" : "vegetables";
+        state[key] = state[key].filter((i) => i.name !== item.name);
       }),
   }))
 );

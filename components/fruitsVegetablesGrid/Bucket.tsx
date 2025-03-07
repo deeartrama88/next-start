@@ -1,17 +1,19 @@
 "use client";
 
-import { FVItem } from "@/types/fruitsVegetables";
+import { FVItem, Timeout } from "@/types/fruitsVegetables";
 import { useFruitsVegetablesGrid } from "@/hooks/useFruitsVegetablesGrid";
 
 const Bucket = () => {
-  const { bucket, addToFruits, addToVegetables } = useFruitsVegetablesGrid();
+  const { bucket, addTimeout, deleteTimeout } = useFruitsVegetablesGrid();
 
   const onItemClick = (item: FVItem) => {
-    if (item.type === "Fruit") {
-      addToFruits(item);
-    } else {
-      addToVegetables(item);
-    }
+    const timeoutId = setTimeout(() => {
+      deleteTimeout(item);
+    }, 5000);
+
+    const timeout: Timeout = { name: item.name, id: timeoutId };
+
+    addTimeout(timeout);
   };
 
   return (
