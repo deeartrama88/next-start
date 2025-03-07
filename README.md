@@ -1,11 +1,8 @@
 # next-start
 simple next start template with zustand and tailwind
----
+--
 contain simple example of async buttons move
----
-<video src='https://github.com/user-attachments/assets/1d99e882-6e4b-4df7-96ed-aa35f39ae546' width=200 />
-
-
-
+--
+<video src='https://github.com/user-attachments/assets/67d44a73-f4a6-43ff-aab8-34f3b1e95f50' />
 
 
